@@ -17,4 +17,6 @@ public class DriverDTO {
     private Double driverLat;
     @NotNull
     private Double driverLon;
+    @NotNull
+    private String vehicle;
 }

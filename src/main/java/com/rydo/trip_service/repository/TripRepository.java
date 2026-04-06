@@ -14,7 +14,7 @@ public interface TripRepository extends JpaRepository<Trip, String> {
 
     @Query(value = """
         SELECT * FROM trips 
-        WHERE status = 'SEARCHING' 
+        WHERE status = 'SEARCHING' AND vehicle_type = :vehicle
         AND (6371 * acos(cos(radians(:driverLat)) * cos(radians(pickup_lat)) * cos(radians(pickup_lng) - radians(:driverLon)) + sin(radians(:driverLat)) * sin(radians(pickup_lat)))) <= :radiusInKm 
         ORDER BY (6371 * acos(cos(radians(:driverLat)) * cos(radians(pickup_lat)) * cos(radians(pickup_lng) - radians(:driverLon)) + sin(radians(:driverLat)) * sin(radians(pickup_lat)))) ASC
         """,
@@ -23,6 +23,7 @@ public interface TripRepository extends JpaRepository<Trip, String> {
             @Param("driverLat") double driverLat,
             @Param("driverLon") double driverLon,
             @Param("radiusInKm") double radiusInKm,
+            @Param("vehicle") String vehicle,
             Pageable pageable
     );
 }

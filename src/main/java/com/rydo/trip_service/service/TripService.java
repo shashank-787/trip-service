@@ -46,19 +46,18 @@ public class TripService {
         return savedTrip;
     }
 
-    //called by driver
+    //called by driver - for searching nearby riders
     public List<RiderDTO> getNearbyRiders(DriverDTO driverDTO) {
         List<Trip> nearbyTrips = tripRepository.findNearbySearchingTrips(
                 driverDTO.getDriverLat(),
                 driverDTO.getDriverLon(),
                 2.0,
+                driverDTO.getVehicle(),
                 PageRequest.of(0, 10)
         );
-        List<RiderDTO> nearbyRiders = nearbyTrips.stream()
+        return nearbyTrips.stream()
                 .map(this::mapToRiderDTO)
                 .collect(Collectors.toList()); // Use .toList() if using Java 16+
-
-        return nearbyRiders;
     }
     private RiderDTO mapToRiderDTO(Trip trip) {
         RiderDTO dto = new RiderDTO();

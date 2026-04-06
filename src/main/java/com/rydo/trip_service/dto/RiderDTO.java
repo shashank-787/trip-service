@@ -18,7 +18,5 @@ public class RiderDTO {
     private Double pickupLat;
     @NotNull
     private Double pickupLng;
-    @NotNull
-    private VehicleType vehicleType; // e.g., "SEDAN", "BIKE"
     //private Double passengerRating;      Optional: to match with high-rated drivers
 }
