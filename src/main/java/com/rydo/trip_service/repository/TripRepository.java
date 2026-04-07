@@ -1,7 +1,9 @@
 package com.rydo.trip_service.repository;
 
 import com.rydo.trip_service.entity.Trip;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -26,4 +28,19 @@ public interface TripRepository extends JpaRepository<Trip, String> {
             @Param("vehicle") String vehicle,
             Pageable pageable
     );
+    @Modifying
+    @Transactional
+    @Query(value = """
+        UPDATE trips 
+        SET driver_id = :driverId, 
+            trip_status = :status, 
+            matched_at = CURRENT_TIMESTAMP 
+        WHERE id = :tripId
+        """, nativeQuery = true)
+    int acceptTripRequest(
+            @Param("tripId") String tripId,
+            @Param("driverId") String driverId,
+            @Param("status") String status
+    );
+
 }

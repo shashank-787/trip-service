@@ -2,9 +2,11 @@ package com.rydo.trip_service.service;
 
 import com.rydo.trip_service.dto.DriverDTO;
 import com.rydo.trip_service.dto.RiderDTO;
+import com.rydo.trip_service.dto.TripAcceptDTO;
 import com.rydo.trip_service.dto.TripCreateRequest;
 import com.rydo.trip_service.entity.Trip;
 import com.rydo.trip_service.enums.TripStatus;
+import com.rydo.trip_service.exception.TripNotFoundException;
 import com.rydo.trip_service.repository.TripRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,8 +44,7 @@ public class TripService {
         newTrip.setFinalFare(estimatedFare.multiply(newTrip.getSurgeMultiplier()));
 
         //save in db
-        Trip savedTrip = tripRepository.save(newTrip);
-        return savedTrip;
+        return tripRepository.save(newTrip);
     }
 
     //called by driver - for searching nearby riders
@@ -59,6 +60,15 @@ public class TripService {
                 .map(this::mapToRiderDTO)
                 .collect(Collectors.toList()); // Use .toList() if using Java 16+
     }
+    //called by the driver
+    public void acceptRide(TripAcceptDTO dto){
+        //update the trip db -> add status, driver id, accepted_at
+        tripRepository.findById(dto.getTripId().toString()).orElseThrow(() -> new TripNotFoundException("Trip not found"));
+        tripRepository.acceptTripRequest(dto.getTripId().toString(), dto.getDriverId().toString(),"MATCHED");
+        //driver sends loc to location service every 3 sec
+    }
+
+//    public getTrip
     private RiderDTO mapToRiderDTO(Trip trip) {
         RiderDTO dto = new RiderDTO();
         dto.setTripId(trip.getId());
