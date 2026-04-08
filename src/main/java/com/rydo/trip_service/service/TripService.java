@@ -39,8 +39,6 @@ public class TripService {
         BigDecimal estimatedFare = tripRequest.getEstimatedDistanceKm().multiply(BigDecimal.valueOf(15));
         newTrip.setEstimatedFare(estimatedFare);
         newTrip.setFinalFare(estimatedFare.multiply(newTrip.getSurgeMultiplier()));
-
-        //save in db
         return tripRepository.save(newTrip);
     }
 
@@ -73,8 +71,17 @@ public class TripService {
     private RiderDTO mapToRiderDTO(Trip trip) {
         RiderDTO dto = new RiderDTO();
         dto.setTripId(trip.getId());
+
         dto.setPickupLat(trip.getPickupLat());
         dto.setPickupLng(trip.getPickupLng());
+        dto.setPickupAddress(trip.getPickupAddress());
+
+        dto.setDropoffAddress(trip.getDropoffAddress());
+        dto.setDropoffLat(trip.getDropoffLat());
+        dto.setDropoffLng(trip.getDropoffLng());
+
+        dto.setFinalFare(trip.getFinalFare());
+        dto.setEstimatedFare(trip.getEstimatedFare());
         return dto;
     }
 

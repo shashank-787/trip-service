@@ -39,7 +39,7 @@ public class TripController {
         List<RiderDTO> ls = tripService.getNearbyRiders(dto);
         return new ResponseEntity<>(ls, HttpStatus.FOUND);
     }
-
+//total dist, fare, source, dest
     @PostMapping("accept-ride")
     public ResponseEntity<Void> acceptRide(@Valid @RequestBody TripAcceptDTO dto){
         tripService.acceptRide(dto);
