@@ -1,9 +1,6 @@
 package com.rydo.trip_service.service;
 
-import com.rydo.trip_service.dto.DriverDTO;
-import com.rydo.trip_service.dto.RiderDTO;
-import com.rydo.trip_service.dto.TripAcceptDTO;
-import com.rydo.trip_service.dto.TripCreateRequest;
+import com.rydo.trip_service.dto.*;
 import com.rydo.trip_service.entity.Trip;
 import com.rydo.trip_service.enums.TripStatus;
 import com.rydo.trip_service.exception.TripNotFoundException;
@@ -63,12 +60,16 @@ public class TripService {
     //called by the driver
     public void acceptRide(TripAcceptDTO dto){
         //update the trip db -> add status, driver id, accepted_at
-        tripRepository.findById(dto.getTripId().toString()).orElseThrow(() -> new TripNotFoundException("Trip not found"));
-        tripRepository.acceptTripRequest(dto.getTripId().toString(), dto.getDriverId().toString(),"MATCHED");
+        tripRepository.findById(dto.getTripId()).orElseThrow(() -> new TripNotFoundException("Trip not found"));
+        tripRepository.acceptTripRequest(dto.getTripId(), dto.getDriverId(),"MATCHED");
         //driver sends loc to location service every 3 sec
     }
+    //called by rider
+    public TripDetails getTripDetails(FetchTripDetails dto){
+        Trip trip = tripRepository.findById(dto.getTripId()).orElseThrow(() -> new TripNotFoundException("Trip not found"));
+        return new TripDetails(trip.getId(), trip.getRiderId(), trip.getDriverId(), trip.getStatus());
+    }
 
-//    public getTrip
     private RiderDTO mapToRiderDTO(Trip trip) {
         RiderDTO dto = new RiderDTO();
         dto.setTripId(trip.getId());

@@ -10,9 +10,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface TripRepository extends JpaRepository<Trip, String> {
+public interface TripRepository extends JpaRepository<Trip, UUID> {
 
     @Query(value = """
         SELECT * FROM trips 
@@ -33,13 +34,13 @@ public interface TripRepository extends JpaRepository<Trip, String> {
     @Query(value = """
         UPDATE trips 
         SET driver_id = :driverId, 
-            trip_status = :status, 
+            status = :status, 
             matched_at = CURRENT_TIMESTAMP 
         WHERE id = :tripId
         """, nativeQuery = true)
     int acceptTripRequest(
-            @Param("tripId") String tripId,
-            @Param("driverId") String driverId,
+            @Param("tripId") UUID tripId,
+            @Param("driverId") UUID driverId,
             @Param("status") String status
     );
 

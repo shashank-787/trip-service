@@ -18,7 +18,7 @@ import java.util.UUID;
 public class Trip {
     @Id
     @Column(updatable = false, nullable = false)
-    private UUID id; // Stores the ULID converted to a UUID format
+    private UUID id;
 
     @Column(name = "rider_id", nullable = false)
     private UUID riderId;

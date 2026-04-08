@@ -1,9 +1,6 @@
 package com.rydo.trip_service.controller;
 
-import com.rydo.trip_service.dto.DriverDTO;
-import com.rydo.trip_service.dto.RiderDTO;
-import com.rydo.trip_service.dto.TripAcceptDTO;
-import com.rydo.trip_service.dto.TripCreateRequest;
+import com.rydo.trip_service.dto.*;
 import com.rydo.trip_service.service.TripService;
 import com.rydo.trip_service.entity.Trip;
 import jakarta.validation.Valid;
@@ -13,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/trips")
@@ -44,8 +42,13 @@ public class TripController {
 
     @PostMapping("accept-ride")
     public ResponseEntity<Void> acceptRide(@Valid @RequestBody TripAcceptDTO dto){
-
         tripService.acceptRide(dto);
         return  ResponseEntity.ok().build();
+    }
+
+    @PostMapping("details")
+    public ResponseEntity<TripDetails> getTripDetails(@Valid @RequestBody FetchTripDetails dto){
+        TripDetails d =tripService.getTripDetails(dto);
+        return new ResponseEntity<>(d, HttpStatus.FOUND);
     }
 }
